@@ -57,38 +57,21 @@ app.post('/message', (req, res) => {
         }
     } else if (message.startsWith('w ') || message.startsWith('ㄷ ') ) {
         wordMeaning(message, (meaning) => {
-            if (meaning) {
                 sendData = {
                     'message': {
                         'text': meaning
                     }
                 }
-                
-            } else {
-                sendData = {
-                    'message' : {
-                        'text': '몰라요'
-                    }
-                }
-            }
+
             res.send(sendData);
             
         });
         return
     } else if (message.startsWith('t ') || message.startsWith('ㅂ ') ) { 
         translate(message, (meaning) => {
-            if (meaning) {
-                sendData = {
-                    'message': {
-                        'text': meaning
-                    }
-                }
-                
-            } else {
-                sendData = {
-                    'message' : {
-                        'text': '몰라요'
-                    }
+            sendData = {
+                'message': {
+                    'text': meaning
                 }
             }
             res.send(sendData);

@@ -1,13 +1,12 @@
 const request = require('request');
 const cheerio = require('cheerio');
 const client = require('cheerio-httpcli');
-const async = require('async');
+var moment = require('moment');
 
 function wordMeaning (message, callback) {
     var word = message.substring(2).trim();
     var toSearch = encodeURIComponent(word);
     var url = `http://ac.dic.naver.net/ptdic/ac?q=${toSearch}&st=1111&r_lt=1111`;
-    console.log('lets find word');
     var meaning = '';
     request({
         url: url,
@@ -29,7 +28,12 @@ function wordMeaning (message, callback) {
 
             
         }
-        callback(meaning);
+        if (meaning) {
+            callback(meaning);
+        }
+        else {
+            callback('몰라요');
+        }
     });
     
 }
@@ -47,7 +51,13 @@ function translate (message, callback) {
         if (!error && response.statusCode === 200) {
             meaning = body.data.translations[0].translatedText;
         }
-        callback(meaning);
+
+        if (meaning) {
+            callback(meaning);
+        }
+        else {
+            callback('몰라요');
+        }
     });
 }
 
@@ -55,7 +65,7 @@ function getCafeteriaMenu(message, callback) {
     var place = message.split(" ")[0];
     var eatingTime = message.split(" ")[1];
 
-    var today = new Date().toISOString().substring(0,10).replace(/-/g, '');
+    var today = moment().format('YYYYMMDD');
     var url = `https://webs.hufs.ac.kr/jsp/HUFS/cafeteria/viewWeek.jsp?startDt=${today}&endDt=${today}`;
     
     if (place == '인문관')
